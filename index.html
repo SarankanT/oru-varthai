@@ -11,7 +11,7 @@
         .screen { display: none; height: 100vh; width: 100%; padding: 30px; flex-direction: column; overflow: hidden; }
         .screen.active { display: flex; }
         .card-shadow { box-shadow: 0 30px 60px rgba(0,0,0,0.06); }
-        .category-container { max-height: 55vh; overflow-y: auto; padding: 12px; -webkit-overflow-scrolling: touch; }
+        .category-container { max-height: 70vh; overflow-y: auto; padding: 12px; -webkit-overflow-scrolling: touch; }
         .category-container::-webkit-scrollbar { display: none; }
         .word-pop { animation: pop 0.45s cubic-bezier(0.19, 1, 0.22, 1); }
         @keyframes pop { from { opacity: 0; transform: scale(0.92) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
@@ -27,26 +27,10 @@
             <p class="text-gray-300 text-[10px] font-black tracking-[0.6em] uppercase">ORU VARTHAI</p>
         </div>
         
-        <div class="flex justify-center space-x-16 mb-12">
-            <div class="text-center">
-                <div id="total-score-1" class="text-5xl font-black text-black mb-1">0</div>
-                <div class="text-[10px] font-black text-gray-300 uppercase tracking-widest">Team A</div>
-            </div>
-            <div class="w-px h-14 bg-gray-100 self-center"></div>
-            <div class="text-center">
-                <div id="total-score-2" class="text-5xl font-black text-black mb-1">0</div>
-                <div class="text-[10px] font-black text-gray-300 uppercase tracking-widest">Team B</div>
-            </div>
-        </div>
-
         <div class="w-full max-w-sm mx-auto">
             <div class="category-container space-y-4" id="category-list">
                 <!-- Categories injected here -->
             </div>
-        </div>
-
-        <div class="mt-12">
-            <button onclick="resetTeams()" class="text-[10px] text-gray-300 font-black tracking-widest uppercase underline opacity-60 hover:opacity-100 transition-opacity">Reset All Scores</button>
         </div>
     </div>
 
@@ -54,7 +38,6 @@
     <div id="screen-game" class="screen justify-between py-14">
         <div class="w-full flex justify-between items-center px-6">
             <button onclick="confirmQuit()" class="text-gray-300 font-black text-xs tracking-widest uppercase">QUIT</button>
-            <div id="game-team-name" class="bg-black text-white px-5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.25em]">Team A</div>
             <div class="text-black font-black w-10 text-right text-3xl tabular-nums" id="game-score">0</div>
         </div>
 
@@ -101,8 +84,6 @@
         let score = 0;
         let timer = 60;
         let timerInterval;
-        let currentTeam = 1;
-        let teamScores = { 1: 0, 2: 0 };
 
         const loadGame = async () => {
             try {
@@ -111,22 +92,19 @@
                 categories = await response.json();
             } catch (e) {
                 console.error('Loading fallback content', e);
-                categories = { "🎬 Movies": [["பாட்ஷா", "Baasha", "A legendary gangster movie where a hidden past is revealed"]] };
+                categories = { "🎬 Movies (திரைப்படங்கள்)": [["பாட்ஷா", "Baasha", "A legendary gangster movie where a hidden past is revealed"]] };
             }
             renderCategories();
-            updateTotalDisplay();
         };
 
         const renderCategories = () => {
             const list = document.getElementById('category-list');
             list.innerHTML = '';
             
-            // Explicitly defining the primary categories to show
             const primaryKeys = ["🎬 Movies (திரைப்படங்கள்)", "🎵 Songs (பாடல்கள்)"];
             const allKeys = Object.keys(categories);
             const otherKeys = allKeys.filter(k => !primaryKeys.includes(k));
 
-            // Render Primaries
             primaryKeys.forEach(cat => {
                 if (categories[cat]) {
                     const btn = document.createElement('button');
@@ -137,7 +115,6 @@
                 }
             });
 
-            // Render "Other" if there are any
             if (otherKeys.length > 0) {
                 const otherContainer = document.createElement('div');
                 otherContainer.id = "other-categories-container";
@@ -174,30 +151,17 @@
             }
         };
 
-        const updateTotalDisplay = () => {
-            document.getElementById('total-score-1').innerText = teamScores[1];
-            document.getElementById('total-score-2').innerText = teamScores[2];
-        };
-
-        const resetTeams = () => {
-            if (confirm("Clear all team points?")) {
-                teamScores = { 1: 0, 2: 0 };
-                currentTeam = 1;
-                updateTotalDisplay();
-            }
-        };
-
         const showScreen = (id) => {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('screen-' + id).classList.add('active');
         };
 
         const startGame = (cat) => {
+            // SHUFFLE WORDS EVERY TIME
             currentWords = [...categories[cat]].sort(() => Math.random() - 0.5);
             score = 0;
             timer = 60;
             document.getElementById('game-score').innerText = score;
-            document.getElementById('game-team-name').innerText = `Team ${currentTeam === 1 ? 'A' : 'B'}`;
             nextWord();
             showScreen('game');
             startTimer();
@@ -249,16 +213,12 @@
 
         const endGame = () => {
             clearInterval(timerInterval);
-            teamScores[currentTeam] += score;
             document.getElementById('final-score').innerText = score;
-            currentTeam = currentTeam === 1 ? 2 : 1;
             showScreen('results');
-            updateTotalDisplay();
         };
 
         const shareScore = () => {
-            const lastTeam = currentTeam === 2 ? 'A' : 'B';
-            const text = `Team ${lastTeam} scored ${score} on Oru Varthai! 🎭`;
+            const text = `I just scored ${score} on Oru Varthai! 🎭`;
             if (navigator.share) navigator.share({ text: text });
         };
 
