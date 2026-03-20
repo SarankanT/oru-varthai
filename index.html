@@ -2,92 +2,80 @@
 <html lang="ta">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Oru Varthai - Tamil Charades</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;700&display=swap" rel="stylesheet">
-        .category-container {
-            max-height: 400px;
-            overflow-y: auto;
-            padding: 12px;
-            -webkit-overflow-scrolling: touch;
-        }
-        .search-input {
-            width: 100%;
-            padding: 12px 20px;
-            border-radius: 99px;
-            border: 1px solid #f0f0f0;
-            background: #fafafa;
-            margin-bottom: 16px;
-            font-size: 14px;
-            outline: none;
-            transition: all 0.2s;
-        }
-        .search-input:focus {
-            border-color: #1677ff;
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(22, 119, 255, 0.1);
-        }
+    <style>
+        body { font-family: 'Public Sans', 'Noto Sans Tamil', sans-serif; background: #fff; }
+        .screen { display: none; height: 100vh; width: 100%; padding: 20px; flex-direction: column; }
+        .screen.active { display: flex; }
+        .card-shadow { box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
+        .category-container { max-height: 50vh; overflow-y: auto; padding: 12px; -webkit-overflow-scrolling: touch; }
+        .search-input { width: 100%; padding: 14px 24px; border-radius: 99px; border: 1px solid #f0f0f0; background: #fafafa; margin-bottom: 20px; font-size: 16px; outline: none; transition: all 0.2s; }
+        .search-input:focus { border-color: #000; background: #fff; }
+        .word-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes pop { from { opacity: 0; transform: scale(0.9) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
     </style>
 </head>
-<body class="overflow-hidden h-screen-ios">
+<body class="overflow-hidden">
 
     <!-- HOME SCREEN -->
-    <div id="screen-home" class="screen active justify-center bg-white">
-        <div class="mb-10 text-center">
-            <h1 class="text-5xl font-extrabold tracking-tight mb-4 text-black">ஒரு வார்த்தை</h1>
-            <p class="text-gray-300 text-xs font-bold tracking-[0.4em] uppercase">ORU VARTHAI</p>
+    <div id="screen-home" class="screen active justify-center text-center">
+        <div class="mb-12">
+            <h1 class="text-6xl font-black tracking-tight mb-2 text-black">ஒரு வார்த்தை</h1>
+            <p class="text-gray-400 text-xs font-bold tracking-[0.5em] uppercase">ORU VARTHAI</p>
         </div>
         
-        <div class="flex justify-center space-x-6 mb-8">
+        <div class="flex justify-center space-x-12 mb-10">
             <div class="text-center">
-                <div id="total-score-1" class="text-3xl font-bold text-black mb-1">0</div>
-                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Team A</div>
+                <div id="total-score-1" class="text-4xl font-bold text-black mb-1">0</div>
+                <div class="text-[10px] font-black text-gray-300 uppercase tracking-widest">Team A</div>
             </div>
-            <div class="w-px h-10 bg-gray-100 self-center"></div>
+            <div class="w-px h-12 bg-gray-100 self-center"></div>
             <div class="text-center">
-                <div id="total-score-2" class="text-3xl font-bold text-black mb-1">0</div>
-                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Team B</div>
+                <div id="total-score-2" class="text-4xl font-bold text-black mb-1">0</div>
+                <div class="text-[10px] font-black text-gray-300 uppercase tracking-widest">Team B</div>
             </div>
         </div>
 
-        <div class="w-full max-w-xs mx-auto">
+        <div class="w-full max-w-sm mx-auto">
             <input type="text" id="category-search" class="search-input" placeholder="Search categories..." oninput="filterCategories()">
             <div class="category-container space-y-3" id="category-list">
                 <!-- Categories injected here -->
             </div>
         </div>
 
-        <div class="mt-8 text-center">
-            <button onclick="resetTeams()" class="text-[10px] text-gray-300 font-medium tracking-widest uppercase underline opacity-50">Reset Scores</button>
+        <div class="mt-10">
+            <button onclick="resetTeams()" class="text-[11px] text-gray-300 font-bold tracking-widest uppercase underline opacity-60 hover:opacity-100">Reset All Scores</button>
         </div>
     </div>
 
     <!-- GAMEPLAY SCREEN -->
-    <div id="screen-game" class="screen justify-between items-center py-10">
-        <div class="w-full flex justify-between items-center">
-            <button onclick="confirmQuit()" class="text-gray-400 font-medium px-2 text-sm">Cancel</button>
-            <div id="game-team-name" class="team-pill active uppercase">Team A</div>
-            <div class="text-black font-bold w-10 text-right text-xl tabular-nums" id="game-score">0</div>
+    <div id="screen-game" class="screen justify-between py-12">
+        <div class="w-full flex justify-between items-center px-4">
+            <button onclick="confirmQuit()" class="text-gray-400 font-bold text-sm tracking-tight">QUIT</button>
+            <div id="game-team-name" class="bg-black text-white px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em]">Team A</div>
+            <div class="text-black font-black w-10 text-right text-2xl tabular-nums" id="game-score">0</div>
         </div>
 
-        <div class="text-center px-4 flex-1 flex flex-col justify-center w-full" id="game-swipe-area">
-            <div id="timer-pill" class="text-xs font-bold tracking-[0.2em] text-gray-300 mb-8 tabular-nums">00:60</div>
+        <div class="text-center px-6 flex-1 flex flex-col justify-center w-full" id="game-swipe-area">
+            <div id="timer-pill" class="text-sm font-black tracking-[0.3em] text-gray-200 mb-10 tabular-nums">00:60</div>
             
             <div id="card-content" class="word-pop space-y-6">
-                <h2 id="word-tamil" class="text-5xl font-extrabold leading-tight text-black">...</h2>
-                <div class="space-y-2">
-                    <p id="word-phonetic" class="text-2xl font-semibold text-gray-600 italic"></p>
-                    <p id="word-meaning" class="text-sm text-gray-400 font-normal px-8 leading-relaxed"></p>
+                <h2 id="word-tamil" class="text-6xl font-black leading-tight text-black">...</h2>
+                <div class="space-y-3">
+                    <p id="word-phonetic" class="text-2xl font-bold text-gray-500 italic"></p>
+                    <p id="word-meaning" class="text-base text-gray-400 font-medium px-10 leading-relaxed"></p>
                 </div>
             </div>
         </div>
         
-        <div class="w-full max-w-sm mx-auto grid grid-cols-2 gap-4 pb-6 px-2">
-            <button onclick="handleAction('pass')" class="ant-btn py-6 bg-[#fff1f0] border border-[#ffa39e] rounded-2xl text-[#cf1322] font-bold text-xl">
+        <div class="w-full max-w-md mx-auto grid grid-cols-2 gap-4 px-4 pb-4">
+            <button onclick="handleAction('pass')" class="py-6 bg-red-50 text-red-500 rounded-3xl font-black text-xl active:scale-95 transition-transform">
                 PASS
             </button>
-            <button onclick="handleAction('correct')" class="ant-btn py-6 bg-[#f6ffed] border border-[#b7eb8f] rounded-2xl text-[#389e0d] font-bold text-xl shadow-sm">
+            <button onclick="handleAction('correct')" class="py-6 bg-green-50 text-green-600 rounded-3xl font-black text-xl shadow-sm active:scale-95 transition-transform">
                 GOT IT
             </button>
         </div>
@@ -95,14 +83,14 @@
 
     <!-- RESULTS SCREEN -->
     <div id="screen-results" class="screen justify-center items-center text-center">
-        <div class="bg-white p-12 rounded-[40px] w-full max-w-xs border border-gray-50 card-shadow">
-            <h2 class="text-gray-400 font-bold mb-2 uppercase tracking-widest text-[10px]">Round Score</h2>
-            <div class="text-8xl font-bold text-black mb-10" id="final-score">0</div>
+        <div class="bg-white p-14 rounded-[50px] w-full max-w-sm border border-gray-50 card-shadow">
+            <h2 class="text-gray-300 font-black mb-3 uppercase tracking-widest text-[11px]">Round Score</h2>
+            <div class="text-9xl font-black text-black mb-12" id="final-score">0</div>
             
-            <button onclick="showScreen('home')" class="ant-btn w-full py-5 bg-black text-white font-bold rounded-2xl text-lg mb-4">
-                NEXT TEAM
+            <button onclick="showScreen('home')" class="w-full py-6 bg-black text-white font-black rounded-3xl text-xl mb-6 active:scale-95 transition-transform">
+                CONTINUE
             </button>
-            <button onclick="shareScore()" class="ant-btn w-full py-4 bg-transparent text-gray-400 rounded-2xl font-medium text-sm">
+            <button onclick="shareScore()" class="w-full py-2 bg-transparent text-gray-300 rounded-2xl font-bold text-xs uppercase tracking-widest">
                 Share Result
             </button>
         </div>
@@ -119,13 +107,11 @@
 
         const loadGame = async () => {
             try {
-                // CTO: Implementing dynamic JSON loading for Expansion Packs
                 const response = await fetch('data/master_pack.json');
                 if (!response.ok) throw new Error('Master pack not found');
                 categories = await response.json();
             } catch (e) {
                 console.error('Loading fallback content', e);
-                // COO: Fallback to minimal hardcoded if network fails
                 categories = {
                     "🎬 Movies": [
                         ["பாட்ஷா", "Baasha", "A legendary 1995 gangster film starring Rajinikanth"]
@@ -143,7 +129,7 @@
                 .filter(cat => cat.toLowerCase().includes(filter.toLowerCase()))
                 .forEach(cat => {
                     const btn = document.createElement('button');
-                    btn.className = "category-pill w-full py-4 px-6 bg-[#fafafa] rounded-full text-center font-semibold text-base transition-all active:scale-[0.98] active:bg-gray-100";
+                    btn.className = "w-full py-5 px-8 bg-gray-50 hover:bg-gray-100 rounded-3xl text-center font-bold text-lg transition-all active:scale-95 mb-3 block";
                     btn.innerText = cat;
                     btn.onclick = () => startGame(cat);
                     list.appendChild(btn);
@@ -161,7 +147,7 @@
         };
 
         const resetTeams = () => {
-            if (confirm("Reset all team points?")) {
+            if (confirm("Clear all team points?")) {
                 teamScores = { 1: 0, 2: 0 };
                 currentTeam = 1;
                 updateTotalDisplay();
@@ -185,10 +171,7 @@
         };
 
         const nextWord = () => {
-            if (currentWords.length === 0) {
-                endGame();
-                return;
-            }
+            if (currentWords.length === 0) { endGame(); return; }
             const [tamil, phonetic, meaning] = currentWords.pop();
             const container = document.getElementById('card-content');
             container.classList.remove('word-pop');
@@ -203,7 +186,7 @@
             if (type === 'correct') {
                 score++;
                 document.getElementById('game-score').innerText = score;
-                if (navigator.vibrate) navigator.vibrate(40);
+                if (navigator.vibrate) navigator.vibrate(50);
             }
             nextWord();
         };
@@ -220,12 +203,12 @@
         const updateTimerDisplay = () => {
             const pill = document.getElementById('timer-pill');
             pill.innerText = `00:${timer.toString().padStart(2, '0')}`;
-            if (timer <= 10) pill.classList.add('text-red-500');
-            else pill.classList.remove('text-red-500');
+            if (timer <= 10) pill.classList.replace('text-gray-200', 'text-red-500');
+            else pill.classList.replace('text-red-500', 'text-gray-200');
         };
 
         const confirmQuit = () => {
-            if (confirm("Quit round?")) {
+            if (confirm("End this round early?")) {
                 clearInterval(timerInterval);
                 showScreen('home');
             }
@@ -242,28 +225,8 @@
 
         const shareScore = () => {
             const lastTeam = currentTeam === 2 ? 'A' : 'B';
-            const text = `Team ${lastTeam} just scored ${score} on Oru Varthai! 🎭`;
+            const text = `Team ${lastTeam} scored ${score} on Oru Varthai! 🎭`;
             if (navigator.share) navigator.share({ text: text });
-        };
-
-        // Swipe support
-        let touchstartX = 0;
-        let touchendX = 0;
-        const swipeArea = document.getElementById('game-swipe-area');
-
-        swipeArea.addEventListener('touchstart', e => {
-            touchstartX = e.changedTouches[0].screenX;
-        });
-
-        swipeArea.addEventListener('touchend', e => {
-            touchendX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-
-        const handleSwipe = () => {
-            const threshold = 50;
-            if (touchendX < touchstartX - threshold) handleAction('correct');
-            if (touchendX > touchstartX + threshold) handleAction('pass');
         };
 
         loadGame();
