@@ -5,77 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Oru Varthai - Tamil Charades</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&family=Noto+Sans+Tamil:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Public Sans', 'Noto Sans Tamil', sans-serif; background: #fff; }
-        .screen { display: none; height: 100vh; width: 100%; padding: 20px; flex-direction: column; }
+        body { font-family: 'Public Sans', 'Noto Sans Tamil', sans-serif; background: #fff; -webkit-tap-highlight-color: transparent; }
+        .screen { display: none; height: 100vh; width: 100%; padding: 30px; flex-direction: column; overflow: hidden; }
         .screen.active { display: flex; }
-        .card-shadow { box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
-        .category-container { max-height: 50vh; overflow-y: auto; padding: 12px; -webkit-overflow-scrolling: touch; }
-        .search-input { width: 100%; padding: 14px 24px; border-radius: 99px; border: 1px solid #f0f0f0; background: #fafafa; margin-bottom: 20px; font-size: 16px; outline: none; transition: all 0.2s; }
-        .search-input:focus { border-color: #000; background: #fff; }
-        .word-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes pop { from { opacity: 0; transform: scale(0.9) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .card-shadow { box-shadow: 0 30px 60px rgba(0,0,0,0.06); }
+        .category-container { max-height: 55vh; overflow-y: auto; padding: 12px; -webkit-overflow-scrolling: touch; }
+        .category-container::-webkit-scrollbar { display: none; }
+        .word-pop { animation: pop 0.45s cubic-bezier(0.19, 1, 0.22, 1); }
+        @keyframes pop { from { opacity: 0; transform: scale(0.92) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .btn-active:active { transform: scale(0.94); background: #f9fafb; }
     </style>
 </head>
 <body class="overflow-hidden">
 
     <!-- HOME SCREEN -->
     <div id="screen-home" class="screen active justify-center text-center">
-        <div class="mb-12">
-            <h1 class="text-6xl font-black tracking-tight mb-2 text-black">ஒரு வார்த்தை</h1>
-            <p class="text-gray-400 text-xs font-bold tracking-[0.5em] uppercase">ORU VARTHAI</p>
+        <div class="mb-14">
+            <h1 class="text-7xl font-[900] tracking-tighter mb-3 text-black">ஒரு வார்த்தை</h1>
+            <p class="text-gray-300 text-[10px] font-black tracking-[0.6em] uppercase">ORU VARTHAI</p>
         </div>
         
-        <div class="flex justify-center space-x-12 mb-10">
+        <div class="flex justify-center space-x-16 mb-12">
             <div class="text-center">
-                <div id="total-score-1" class="text-4xl font-bold text-black mb-1">0</div>
+                <div id="total-score-1" class="text-5xl font-black text-black mb-1">0</div>
                 <div class="text-[10px] font-black text-gray-300 uppercase tracking-widest">Team A</div>
             </div>
-            <div class="w-px h-12 bg-gray-100 self-center"></div>
+            <div class="w-px h-14 bg-gray-100 self-center"></div>
             <div class="text-center">
-                <div id="total-score-2" class="text-4xl font-bold text-black mb-1">0</div>
+                <div id="total-score-2" class="text-5xl font-black text-black mb-1">0</div>
                 <div class="text-[10px] font-black text-gray-300 uppercase tracking-widest">Team B</div>
             </div>
         </div>
 
         <div class="w-full max-w-sm mx-auto">
-            <input type="text" id="category-search" class="search-input" placeholder="Search categories..." oninput="filterCategories()">
-            <div class="category-container space-y-3" id="category-list">
+            <div class="category-container space-y-4" id="category-list">
                 <!-- Categories injected here -->
             </div>
         </div>
 
-        <div class="mt-10">
-            <button onclick="resetTeams()" class="text-[11px] text-gray-300 font-bold tracking-widest uppercase underline opacity-60 hover:opacity-100">Reset All Scores</button>
+        <div class="mt-12">
+            <button onclick="resetTeams()" class="text-[10px] text-gray-300 font-black tracking-widest uppercase underline opacity-60 hover:opacity-100 transition-opacity">Reset All Scores</button>
         </div>
     </div>
 
     <!-- GAMEPLAY SCREEN -->
-    <div id="screen-game" class="screen justify-between py-12">
-        <div class="w-full flex justify-between items-center px-4">
-            <button onclick="confirmQuit()" class="text-gray-400 font-bold text-sm tracking-tight">QUIT</button>
-            <div id="game-team-name" class="bg-black text-white px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em]">Team A</div>
-            <div class="text-black font-black w-10 text-right text-2xl tabular-nums" id="game-score">0</div>
+    <div id="screen-game" class="screen justify-between py-14">
+        <div class="w-full flex justify-between items-center px-6">
+            <button onclick="confirmQuit()" class="text-gray-300 font-black text-xs tracking-widest uppercase">QUIT</button>
+            <div id="game-team-name" class="bg-black text-white px-5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.25em]">Team A</div>
+            <div class="text-black font-black w-10 text-right text-3xl tabular-nums" id="game-score">0</div>
         </div>
 
-        <div class="text-center px-6 flex-1 flex flex-col justify-center w-full" id="game-swipe-area">
-            <div id="timer-pill" class="text-sm font-black tracking-[0.3em] text-gray-200 mb-10 tabular-nums">00:60</div>
+        <div class="text-center px-8 flex-1 flex flex-col justify-center w-full" id="game-swipe-area">
+            <div id="timer-pill" class="text-base font-black tracking-[0.4em] text-gray-100 mb-12 tabular-nums">00:60</div>
             
-            <div id="card-content" class="word-pop space-y-6">
-                <h2 id="word-tamil" class="text-6xl font-black leading-tight text-black">...</h2>
-                <div class="space-y-3">
-                    <p id="word-phonetic" class="text-2xl font-bold text-gray-500 italic"></p>
-                    <p id="word-meaning" class="text-base text-gray-400 font-medium px-10 leading-relaxed"></p>
+            <div id="card-content" class="word-pop space-y-8">
+                <h2 id="word-tamil" class="text-7xl font-black leading-[1.15] text-black">...</h2>
+                <div class="space-y-4">
+                    <p id="word-phonetic" class="text-2xl font-bold text-gray-400 italic tracking-tight"></p>
+                    <p id="word-meaning" class="text-base text-gray-300 font-medium px-12 leading-relaxed"></p>
                 </div>
             </div>
         </div>
         
-        <div class="w-full max-w-md mx-auto grid grid-cols-2 gap-4 px-4 pb-4">
-            <button onclick="handleAction('pass')" class="py-6 bg-red-50 text-red-500 rounded-3xl font-black text-xl active:scale-95 transition-transform">
+        <div class="w-full max-w-md mx-auto grid grid-cols-2 gap-5 px-6 pb-6">
+            <button onclick="handleAction('pass')" class="py-7 bg-red-50 text-red-500 rounded-[35px] font-black text-2xl active:scale-95 transition-transform uppercase tracking-tighter">
                 PASS
             </button>
-            <button onclick="handleAction('correct')" class="py-6 bg-green-50 text-green-600 rounded-3xl font-black text-xl shadow-sm active:scale-95 transition-transform">
+            <button onclick="handleAction('correct')" class="py-7 bg-green-50 text-green-600 rounded-[35px] font-black text-2xl shadow-sm active:scale-95 transition-transform uppercase tracking-tighter">
                 GOT IT
             </button>
         </div>
@@ -83,14 +82,14 @@
 
     <!-- RESULTS SCREEN -->
     <div id="screen-results" class="screen justify-center items-center text-center">
-        <div class="bg-white p-14 rounded-[50px] w-full max-w-sm border border-gray-50 card-shadow">
-            <h2 class="text-gray-300 font-black mb-3 uppercase tracking-widest text-[11px]">Round Score</h2>
-            <div class="text-9xl font-black text-black mb-12" id="final-score">0</div>
+        <div class="bg-white p-16 rounded-[60px] w-full max-w-sm border border-gray-50 card-shadow">
+            <h2 class="text-gray-200 font-black mb-4 uppercase tracking-widest text-[12px]">Round Score</h2>
+            <div class="text-[10rem] font-black text-black leading-none mb-16 tracking-tighter" id="final-score">0</div>
             
-            <button onclick="showScreen('home')" class="w-full py-6 bg-black text-white font-black rounded-3xl text-xl mb-6 active:scale-95 transition-transform">
+            <button onclick="showScreen('home')" class="w-full py-7 bg-black text-white font-black rounded-[35px] text-2xl mb-8 active:scale-95 transition-transform uppercase tracking-tighter">
                 CONTINUE
             </button>
-            <button onclick="shareScore()" class="w-full py-2 bg-transparent text-gray-300 rounded-2xl font-bold text-xs uppercase tracking-widest">
+            <button onclick="shareScore()" class="w-full py-2 bg-transparent text-gray-300 rounded-2xl font-black text-[10px] uppercase tracking-[0.25em]">
                 Share Result
             </button>
         </div>
@@ -112,33 +111,22 @@
                 categories = await response.json();
             } catch (e) {
                 console.error('Loading fallback content', e);
-                categories = {
-                    "🎬 Movies": [
-                        ["பாட்ஷா", "Baasha", "A legendary 1995 gangster film starring Rajinikanth"]
-                    ]
-                };
+                categories = { "🎬 Movies": [["பாட்ஷா", "Baasha", "A legendary gangster movie where a hidden past is revealed"]] };
             }
             renderCategories();
             updateTotalDisplay();
         };
 
-        const renderCategories = (filter = '') => {
+        const renderCategories = () => {
             const list = document.getElementById('category-list');
             list.innerHTML = '';
-            Object.keys(categories)
-                .filter(cat => cat.toLowerCase().includes(filter.toLowerCase()))
-                .forEach(cat => {
-                    const btn = document.createElement('button');
-                    btn.className = "w-full py-5 px-8 bg-gray-50 hover:bg-gray-100 rounded-3xl text-center font-bold text-lg transition-all active:scale-95 mb-3 block";
-                    btn.innerText = cat;
-                    btn.onclick = () => startGame(cat);
-                    list.appendChild(btn);
-                });
-        };
-
-        const filterCategories = () => {
-            const query = document.getElementById('category-search').value;
-            renderCategories(query);
+            Object.keys(categories).forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = "w-full py-6 px-10 bg-gray-50 hover:bg-gray-100 rounded-[35px] text-center font-black text-xl transition-all active:scale-95 btn-active uppercase tracking-tight";
+                btn.innerText = cat;
+                btn.onclick = () => startGame(cat);
+                list.appendChild(btn);
+            });
         };
 
         const updateTotalDisplay = () => {
@@ -186,7 +174,7 @@
             if (type === 'correct') {
                 score++;
                 document.getElementById('game-score').innerText = score;
-                if (navigator.vibrate) navigator.vibrate(50);
+                if (navigator.vibrate) navigator.vibrate(60);
             }
             nextWord();
         };
@@ -203,8 +191,8 @@
         const updateTimerDisplay = () => {
             const pill = document.getElementById('timer-pill');
             pill.innerText = `00:${timer.toString().padStart(2, '0')}`;
-            if (timer <= 10) pill.classList.replace('text-gray-200', 'text-red-500');
-            else pill.classList.replace('text-red-500', 'text-gray-200');
+            if (timer <= 10) pill.classList.replace('text-gray-100', 'text-red-500');
+            else pill.classList.replace('text-red-500', 'text-gray-100');
         };
 
         const confirmQuit = () => {
