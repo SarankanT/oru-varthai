@@ -120,13 +120,58 @@
         const renderCategories = () => {
             const list = document.getElementById('category-list');
             list.innerHTML = '';
-            Object.keys(categories).forEach(cat => {
-                const btn = document.createElement('button');
-                btn.className = "w-full py-6 px-10 bg-gray-50 hover:bg-gray-100 rounded-[35px] text-center font-black text-xl transition-all active:scale-95 btn-active uppercase tracking-tight";
-                btn.innerText = cat;
-                btn.onclick = () => startGame(cat);
-                list.appendChild(btn);
+            
+            // Explicitly defining the primary categories to show
+            const primaryKeys = ["🎬 Movies (திரைப்படங்கள்)", "🎵 Songs (பாடல்கள்)"];
+            const allKeys = Object.keys(categories);
+            const otherKeys = allKeys.filter(k => !primaryKeys.includes(k));
+
+            // Render Primaries
+            primaryKeys.forEach(cat => {
+                if (categories[cat]) {
+                    const btn = document.createElement('button');
+                    btn.className = "w-full py-6 px-10 bg-gray-50 hover:bg-gray-100 rounded-[35px] text-center font-black text-xl transition-all active:scale-95 btn-active uppercase tracking-tight mb-4";
+                    btn.innerText = cat;
+                    btn.onclick = () => startGame(cat);
+                    list.appendChild(btn);
+                }
             });
+
+            // Render "Other" if there are any
+            if (otherKeys.length > 0) {
+                const otherContainer = document.createElement('div');
+                otherContainer.id = "other-categories-container";
+                otherContainer.className = "hidden opacity-0 transform translate-y-4 transition-all duration-500 ease-out";
+                
+                otherKeys.forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.className = "w-full py-5 px-10 bg-gray-50/50 hover:bg-gray-100 rounded-[30px] text-center font-bold text-lg transition-all active:scale-95 mb-3 block opacity-60";
+                    btn.innerText = cat;
+                    btn.onclick = () => startGame(cat);
+                    otherContainer.appendChild(btn);
+                });
+
+                const toggleBtn = document.createElement('button');
+                toggleBtn.className = "text-[10px] text-gray-300 font-black tracking-widest uppercase mt-4 mb-2 opacity-40 hover:opacity-80 transition-all";
+                toggleBtn.innerText = "Show Other Categories";
+                toggleBtn.onclick = () => {
+                    const isHidden = otherContainer.classList.contains('hidden');
+                    if (isHidden) {
+                        otherContainer.classList.remove('hidden');
+                        setTimeout(() => {
+                            otherContainer.classList.remove('opacity-0', 'translate-y-4');
+                            toggleBtn.innerText = "Hide Other Categories";
+                        }, 10);
+                    } else {
+                        otherContainer.classList.add('opacity-0', 'translate-y-4');
+                        toggleBtn.innerText = "Show Other Categories";
+                        setTimeout(() => otherContainer.classList.add('hidden'), 500);
+                    }
+                };
+                
+                list.appendChild(toggleBtn);
+                list.appendChild(otherContainer);
+            }
         };
 
         const updateTotalDisplay = () => {
