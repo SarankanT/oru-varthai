@@ -29,19 +29,45 @@
             --shadow: rgba(0,0,0,0.06);
             --timer-color: #e5e7eb;
         }
-        body { font-family: 'Public Sans', 'Noto Sans Tamil', sans-serif; background: var(--bg-color); color: var(--text-main); -webkit-tap-highlight-color: transparent; transition: background 0.3s, color 0.3s; }
-        .screen { display: none; height: 100vh; width: 100%; padding: 30px; flex-direction: column; overflow: hidden; align-items: center; justify-content: center; }
+        body { 
+            font-family: 'Public Sans', 'Noto Sans Tamil', sans-serif; 
+            background: var(--bg-color); 
+            color: var(--text-main); 
+            -webkit-tap-highlight-color: transparent; 
+            transition: background 0.3s, color 0.3s;
+            margin: 0;
+            padding: 0;
+            overscroll-behavior: none;
+        }
+        .screen { 
+            display: none; 
+            height: 100vh; 
+            height: -webkit-fill-available;
+            width: 100%; 
+            padding: 20px; 
+            flex-direction: column; 
+            overflow: hidden; 
+            align-items: center; 
+            justify-content: center;
+            box-sizing: border-box;
+        }
         .screen.active { display: flex; }
         .card-shadow { box-shadow: 0 30px 60px var(--shadow); }
-        .category-container { width: 100%; max-width: 400px; max-height: 70vh; overflow-y: auto; padding: 12px; -webkit-overflow-scrolling: touch; }
+        .category-container { 
+            width: 100%; 
+            max-width: 400px; 
+            max-height: 60vh; 
+            overflow-y: auto; 
+            padding: 10px; 
+            -webkit-overflow-scrolling: touch; 
+        }
         .category-container::-webkit-scrollbar { display: none; }
         .word-pop { animation: pop 0.45s cubic-bezier(0.19, 1, 0.22, 1); }
         @keyframes pop { from { opacity: 0; transform: scale(0.92) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-        .btn-active:active { transform: scale(0.94); background: var(--btn-hover); }
+        .btn-active:active { transform: scale(0.96); background: var(--btn-hover); }
         .correct-bg { background-color: #064e3b44 !important; transition: background-color 0.2s; }
         .pass-bg { background-color: #7f1d1d44 !important; transition: background-color 0.2s; }
-        .theme-toggle { position: absolute; top: 20px; right: 20px; z-index: 50; cursor: pointer; padding: 10px; opacity: 0.5; transition: opacity 0.2s; }
-        .theme-toggle:hover { opacity: 1; }
+        .theme-toggle { position: absolute; top: 15px; right: 15px; z-index: 50; cursor: pointer; padding: 10px; opacity: 0.6; }
     </style>
 </head>
 <body class="overflow-hidden bg-black text-white">
@@ -53,40 +79,40 @@
 
     <!-- HOME SCREEN -->
     <div id="screen-home" class="screen active text-center">
-        <div class="mb-14">
-            <h1 class="text-7xl font-[900] tracking-tighter mb-3" style="color: var(--text-main)">ஒரு வார்த்தை</h1>
-            <p class="text-[10px] font-black tracking-[0.6em] uppercase" style="color: var(--text-dim)">ORU VARTHAI</p>
+        <div class="mb-10">
+            <h1 class="text-5xl md:text-7xl font-[900] tracking-tighter mb-2" style="color: var(--text-main)">ஒரு வார்த்தை</h1>
+            <p class="text-[9px] font-black tracking-[0.6em] uppercase" style="color: var(--text-dim)">ORU VARTHAI</p>
         </div>
         
-        <div class="category-container space-y-4" id="category-list">
+        <div class="category-container space-y-3" id="category-list">
             <!-- Categories injected here -->
         </div>
     </div>
 
     <!-- GAMEPLAY SCREEN -->
-    <div id="screen-game" class="screen py-14">
-        <div class="w-full max-w-md flex justify-between items-center px-6 absolute top-10">
-            <button onclick="confirmQuit()" class="font-black text-xs tracking-widest uppercase" style="color: var(--text-dim)">QUIT</button>
+    <div id="screen-game" class="screen py-8">
+        <div class="w-full max-w-md flex justify-between items-center px-6 absolute top-6">
+            <button onclick="confirmQuit()" class="font-black text-xs tracking-widest uppercase p-2" style="color: var(--text-dim)">QUIT</button>
             <div class="font-black w-10 text-right text-3xl tabular-nums" style="color: var(--text-main)" id="game-score">0</div>
         </div>
 
-        <div class="text-center px-8 flex flex-col justify-center items-center w-full max-w-2xl" id="game-swipe-area">
-            <div id="timer-pill" class="text-base font-black tracking-[0.4em] mb-12 tabular-nums" style="color: var(--timer-color)">00:60</div>
+        <div class="text-center px-4 flex flex-col justify-center items-center w-full max-w-2xl" id="game-swipe-area">
+            <div id="timer-pill" class="text-sm font-black tracking-[0.4em] mb-8 tabular-nums" style="color: var(--timer-color)">00:60</div>
             
-            <div id="card-content" class="word-pop space-y-8 w-full">
-                <h2 id="word-tamil" class="text-7xl font-black leading-[1.15]" style="color: var(--text-main)">...</h2>
-                <div class="space-y-4">
-                    <p id="word-phonetic" class="text-2xl font-bold italic tracking-tight" style="color: var(--text-accent)"></p>
-                    <p id="word-meaning" class="text-base font-medium px-4 md:px-12 leading-relaxed" style="color: var(--text-dim)"></p>
+            <div id="card-content" class="word-pop space-y-6 w-full">
+                <h2 id="word-tamil" class="text-5xl md:text-7xl font-black leading-tight" style="color: var(--text-main)">...</h2>
+                <div class="space-y-3">
+                    <p id="word-phonetic" class="text-xl md:text-2xl font-bold italic tracking-tight" style="color: var(--text-accent)"></p>
+                    <p id="word-meaning" class="text-sm md:text-base font-medium px-4 md:px-12 leading-relaxed" style="color: var(--text-dim)"></p>
                 </div>
             </div>
         </div>
         
-        <div class="w-full max-w-md grid grid-cols-2 gap-5 px-6 pb-6 absolute bottom-10">
-            <button onclick="handleAction('pass')" class="py-7 bg-red-950/30 text-red-500 rounded-[35px] font-black text-2xl active:scale-95 transition-transform uppercase tracking-tighter border border-red-900/50">
+        <div class="w-full max-w-md grid grid-cols-2 gap-4 px-6 pb-6 absolute bottom-6">
+            <button onclick="handleAction('pass')" class="py-5 md:py-7 bg-red-950/30 text-red-500 rounded-[30px] font-black text-xl md:text-2xl active:scale-95 transition-transform uppercase tracking-tighter border border-red-900/50">
                 PASS
             </button>
-            <button onclick="handleAction('correct')" class="py-7 bg-green-950/30 text-green-500 rounded-[35px] font-black text-2xl shadow-sm active:scale-95 transition-transform uppercase tracking-tighter border border-green-900/50">
+            <button onclick="handleAction('correct')" class="py-5 md:py-7 bg-green-950/30 text-green-500 rounded-[30px] font-black text-xl md:text-2xl shadow-sm active:scale-95 transition-transform uppercase tracking-tighter border border-green-900/50">
                 GOT IT
             </button>
         </div>
@@ -94,14 +120,14 @@
 
     <!-- RESULTS SCREEN -->
     <div id="screen-results" class="screen justify-center items-center text-center">
-        <div class="p-16 rounded-[60px] w-full max-w-sm border card-shadow" style="background: var(--card-bg); border-color: var(--card-border)">
-            <h2 class="font-black mb-4 uppercase tracking-widest text-[12px]" style="color: var(--text-dim)">Round Score</h2>
-            <div class="text-[10rem] font-black leading-none mb-16 tracking-tighter" style="color: var(--text-main)" id="final-score">0</div>
+        <div class="p-10 md:p-16 rounded-[50px] w-full max-w-[340px] border card-shadow" style="background: var(--card-bg); border-color: var(--card-border)">
+            <h2 class="font-black mb-4 uppercase tracking-widest text-[10px]" style="color: var(--text-dim)">Round Score</h2>
+            <div class="text-8xl md:text-[10rem] font-black leading-none mb-12 md:mb-16 tracking-tighter" style="color: var(--text-main)" id="final-score">0</div>
             
-            <button onclick="showScreen('home')" class="w-full py-7 font-black rounded-[35px] text-2xl mb-8 active:scale-95 transition-transform uppercase tracking-tighter theme-aware-btn">
+            <button onclick="showScreen('home')" class="w-full py-6 md:py-7 font-black rounded-[30px] text-xl md:text-2xl mb-6 active:scale-95 transition-transform uppercase tracking-tighter theme-aware-btn">
                 CONTINUE
             </button>
-            <button onclick="shareScore()" class="w-full py-2 bg-transparent rounded-2xl font-black text-[10px] uppercase tracking-[0.25em]" style="color: var(--text-dim)">
+            <button onclick="shareScore()" class="w-full py-2 bg-transparent rounded-2xl font-black text-[9px] uppercase tracking-[0.25em]" style="color: var(--text-dim)">
                 Share Result
             </button>
         </div>
