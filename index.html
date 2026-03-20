@@ -146,7 +146,7 @@
 
         const loadGame = async () => {
             try {
-                const response = await fetch('data/master_pack.json');
+                const response = await fetch(`data/master_pack.json?t=${new Date().getTime()}`);
                 if (!response.ok) throw new Error('Master pack not found');
                 categories = await response.json();
                 renderCategories();
