@@ -50,16 +50,24 @@
             align-items: center; 
             justify-content: center;
             box-sizing: border-box;
+            position: relative;
         }
         .screen.active { display: flex; }
         .card-shadow { box-shadow: 0 30px 60px var(--shadow); }
         .category-container { 
             width: 100%; 
             max-width: 400px; 
-            max-height: 60vh; 
+            max-height: 55vh; 
             overflow-y: auto; 
             padding: 10px; 
+            margin: 0 auto;
             -webkit-overflow-scrolling: touch; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .category-container button {
+            width: 100%;
         }
         .category-container::-webkit-scrollbar { display: none; }
         .word-pop { animation: pop 0.45s cubic-bezier(0.19, 1, 0.22, 1); }
