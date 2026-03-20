@@ -1,0 +1,62 @@
+{
+  "📚 Literature (இலக்கியம்)": [
+    ["திருக்குறள்", "Thirukkural", "Classic Tamil text with 1,330 couplets"],
+    ["சிலப்பதிகாரம்", "Silappathikaram", "The Tale of an Anklet, an epic"],
+    ["மணிமேகலை", "Manimekalai", "One of the Five Great Tamil Epics"],
+    ["ஔவையார்", "Avvaiyar", "Famous female poet and philosopher"],
+    ["பாரதியார்", "Bharathiyar", "National poet and social reformer"],
+    ["கம்பராமாயணம்", "Kambaramayanam", "Tamil version of the Ramayana"],
+    ["மதுரை மீனாட்சி", "Madurai Meenakshi", "Goddess and historical temple"],
+    ["தமிழ் தாய்", "Tamil Thai", "Personification of the Tamil language"],
+    ["அகத்தியர்", "Agathiyar", "Legendary sage, father of Tamil grammar"],
+    ["தொல்காப்பியம்", "Tolkappiyam", "Oldest extant Tamil grammar text"]
+  ],
+  "🍱 Food (உணவு)": [
+    ["மசாலா தோசை", "Masala Dosa", "Crispy crepe with potato filling"],
+    ["பரோட்டா சால்னா", "Parotta Salna", "Layered flatbread with spicy gravy"],
+    ["பழனி பஞ்சாமிர்தம்", "Palani Panchamirtham", "Traditional fruit preserve offering"],
+    ["ஜிகர்தண்டா", "Jigarthanda", "Madurai special cold beverage"],
+    ["சுண்டைக்காய்", "Sundaikkai", "Turkey berry, used in vatha kuzhambu"],
+    ["காபி ஹவுஸ்", "Coffee House", "Traditional filter coffee culture"],
+    ["வாழை இலை விருந்து", "Vazhai Ilai Virundhu", "Traditional banana leaf feast"],
+    ["ஆப்பம் தேங்காய்ப்பால்", "Appam Thengai Paal", "Lacy pancakes with coconut milk"],
+    ["மீன் குழம்பு", "Meen Kuzhambu", "Traditional spicy fish curry"],
+    ["இனிப்பு பணியாரம்", "Inippu Paniyaram", "Sweet fermented rice dumplings"]
+  ],
+  "🏛️ History (வரலாறு)": [
+    ["ராஜ ராஜ சோழன்", "Raja Raja Cholan", "Great Chola emperor"],
+    ["பாண்டியர்", "Pandiyar", "Dynasty that ruled the southern region"],
+    ["சேரர்", "Cherar", "Dynasty of the western coast/Kerala region"],
+    ["பல்லவர்", "Pallavar", "Known for cave temples and Mahabalipuram"],
+    ["வ.உ.சிதம்பரனார்", "V.O.C.", "The Swadeshi steam navigation pioneer"],
+    ["கரிகால சோழன்", "Karikala Cholan", "Builder of the Kallanai dam"],
+    ["பழவேற்காடு", "Pulicat", "Historical trading port"],
+    ["தஞ்சை பெரிய கோவில்", "Thanjavur Periya Kovil", "Big Temple, architectural marvel"],
+    ["சிவகங்கை சீமை", "Sivagangai Seemai", "Heroic resistance against British"],
+    ["வேலு நாச்சியார்", "Velu Nachiyar", "First queen to fight British rule"]
+  ],
+  "🏡 Villages & Places (ஊர்கள்)": [
+    ["மயிலாடுதுறை", "Mayiladuthurai", "Town of the dancing peacock"],
+    ["பொள்ளாச்சி", "Pollachi", "Known for its natural beauty and coconuts"],
+    ["காரைக்குடி", "Karaikudi", "Heart of the Chettinad region"],
+    ["கன்னியாகுமரி", "Kanyakumari", "Southernmost tip of India"],
+    ["கொடைக்கானல்", "Kodaikanal", "Princess of Hill Stations"],
+    ["ஈரோடு மஞ்சள்", "Erode Manjal", "Famous for its turmeric markets"],
+    ["திருநெல்வேலி அல்வா", "Tirunelveli Halwa", "Famous wheat-based sweet"],
+    ["தூத்துக்குடி", "Thoothukudi", "Pearl City of Tamil Nadu"],
+    ["நீலகிரி", "Nilgiri", "Blue Mountains tea region"],
+    ["கும்பகோணம்", "Kumbakonam", "City of temples and filter coffee"]
+  ],
+  "🔥 Slang (கொச்சை வழக்கு)": [
+    ["கெத்து", "Gethu", "Swag or stylish confidence"],
+    ["சீன் போடுறான்", "Scene Poduran", "Showing off or acting superior"],
+    ["மொக்கை", "Mokkai", "Lame or boring (usually a joke)"],
+    ["பீதி", "Beethi", "Panic or intense fear"],
+    ["ஆப்பு", "Aappu", "Being trapped or outsmarted"],
+    ["மச்சி", "Machi", "Dude / Best friend / Brother-in-law"],
+    ["கலாய்க்கிறது", "Kalayikirathu", "Trolling or pulling someone's leg"],
+    ["வச்சு செய்றாங்க", "Vachu Seiranga", "Targeting or handling someone strictly"],
+    ["அல்வா குடுக்காத", "Halwa Kudukkatha", "Don't deceive or trick me"],
+    ["பீட்டர்", "Peter", "Someone who shows off speaking English"]
+  ]
+}

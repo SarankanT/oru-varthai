@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Oru Varthai - Tamil Charades</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;700&display=swap" rel="stylesheet">
+        .category-container {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 12px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 99px;
+            border: 1px solid #f0f0f0;
+            background: #fafafa;
+            margin-bottom: 16px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .search-input:focus {
+            border-color: #1677ff;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(22, 119, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="overflow-hidden h-screen-ios">
+
+    <!-- HOME SCREEN -->
+    <div id="screen-home" class="screen active justify-center bg-white">
+        <div class="mb-10 text-center">
+            <h1 class="text-5xl font-extrabold tracking-tight mb-4 text-black">ஒரு வார்த்தை</h1>
+            <p class="text-gray-300 text-xs font-bold tracking-[0.4em] uppercase">ORU VARTHAI</p>
+        </div>
+        
+        <div class="flex justify-center space-x-6 mb-8">
+            <div class="text-center">
+                <div id="total-score-1" class="text-3xl font-bold text-black mb-1">0</div>
+                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Team A</div>
+            </div>
+            <div class="w-px h-10 bg-gray-100 self-center"></div>
+            <div class="text-center">
+                <div id="total-score-2" class="text-3xl font-bold text-black mb-1">0</div>
+                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Team B</div>
+            </div>
+        </div>
+
+        <div class="w-full max-w-xs mx-auto">
+            <input type="text" id="category-search" class="search-input" placeholder="Search categories..." oninput="filterCategories()">
+            <div class="category-container space-y-3" id="category-list">
+                <!-- Categories injected here -->
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <button onclick="resetTeams()" class="text-[10px] text-gray-300 font-medium tracking-widest uppercase underline opacity-50">Reset Scores</button>
+        </div>
+    </div>
+
+    <!-- GAMEPLAY SCREEN -->
+    <div id="screen-game" class="screen justify-between items-center py-10">
+        <div class="w-full flex justify-between items-center">
+            <button onclick="confirmQuit()" class="text-gray-400 font-medium px-2 text-sm">Cancel</button>
+            <div id="game-team-name" class="team-pill active uppercase">Team A</div>
+            <div class="text-black font-bold w-10 text-right text-xl tabular-nums" id="game-score">0</div>
+        </div>
+
+        <div class="text-center px-4 flex-1 flex flex-col justify-center w-full" id="game-swipe-area">
+            <div id="timer-pill" class="text-xs font-bold tracking-[0.2em] text-gray-300 mb-8 tabular-nums">00:60</div>
+            
+            <div id="card-content" class="word-pop space-y-6">
+                <h2 id="word-tamil" class="text-5xl font-extrabold leading-tight text-black">...</h2>
+                <div class="space-y-2">
+                    <p id="word-phonetic" class="text-2xl font-semibold text-gray-600 italic"></p>
+                    <p id="word-meaning" class="text-sm text-gray-400 font-normal px-8 leading-relaxed"></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="w-full max-w-sm mx-auto grid grid-cols-2 gap-4 pb-6 px-2">
+            <button onclick="handleAction('pass')" class="ant-btn py-6 bg-[#fff1f0] border border-[#ffa39e] rounded-2xl text-[#cf1322] font-bold text-xl">
+                PASS
+            </button>
+            <button onclick="handleAction('correct')" class="ant-btn py-6 bg-[#f6ffed] border border-[#b7eb8f] rounded-2xl text-[#389e0d] font-bold text-xl shadow-sm">
+                GOT IT
+            </button>
+        </div>
+    </div>
+
+    <!-- RESULTS SCREEN -->
+    <div id="screen-results" class="screen justify-center items-center text-center">
+        <div class="bg-white p-12 rounded-[40px] w-full max-w-xs border border-gray-50 card-shadow">
+            <h2 class="text-gray-400 font-bold mb-2 uppercase tracking-widest text-[10px]">Round Score</h2>
+            <div class="text-8xl font-bold text-black mb-10" id="final-score">0</div>
+            
+            <button onclick="showScreen('home')" class="ant-btn w-full py-5 bg-black text-white font-bold rounded-2xl text-lg mb-4">
+                NEXT TEAM
+            </button>
+            <button onclick="shareScore()" class="ant-btn w-full py-4 bg-transparent text-gray-400 rounded-2xl font-medium text-sm">
+                Share Result
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let categories = {};
+        let currentWords = [];
+        let score = 0;
+        let timer = 60;
+        let timerInterval;
+        let currentTeam = 1;
+        let teamScores = { 1: 0, 2: 0 };
+
+        const loadGame = async () => {
+            try {
+                // CTO: Implementing dynamic JSON loading for Expansion Packs
+                const response = await fetch('data/master_pack.json');
+                if (!response.ok) throw new Error('Master pack not found');
+                categories = await response.json();
+            } catch (e) {
+                console.error('Loading fallback content', e);
+                // COO: Fallback to minimal hardcoded if network fails
+                categories = {
+                    "🎬 Movies": [
+                        ["பாட்ஷா", "Baasha", "A legendary 1995 gangster film starring Rajinikanth"]
+                    ]
+                };
+            }
+            renderCategories();
+            updateTotalDisplay();
+        };
+
+        const renderCategories = (filter = '') => {
+            const list = document.getElementById('category-list');
+            list.innerHTML = '';
+            Object.keys(categories)
+                .filter(cat => cat.toLowerCase().includes(filter.toLowerCase()))
+                .forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.className = "category-pill w-full py-4 px-6 bg-[#fafafa] rounded-full text-center font-semibold text-base transition-all active:scale-[0.98] active:bg-gray-100";
+                    btn.innerText = cat;
+                    btn.onclick = () => startGame(cat);
+                    list.appendChild(btn);
+                });
+        };
+
+        const filterCategories = () => {
+            const query = document.getElementById('category-search').value;
+            renderCategories(query);
+        };
+
+        const updateTotalDisplay = () => {
+            document.getElementById('total-score-1').innerText = teamScores[1];
+            document.getElementById('total-score-2').innerText = teamScores[2];
+        };
+
+        const resetTeams = () => {
+            if (confirm("Reset all team points?")) {
+                teamScores = { 1: 0, 2: 0 };
+                currentTeam = 1;
+                updateTotalDisplay();
+            }
+        };
+
+        const showScreen = (id) => {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen-' + id).classList.add('active');
+        };
+
+        const startGame = (cat) => {
+            currentWords = [...categories[cat]].sort(() => Math.random() - 0.5);
+            score = 0;
+            timer = 60;
+            document.getElementById('game-score').innerText = score;
+            document.getElementById('game-team-name').innerText = `Team ${currentTeam === 1 ? 'A' : 'B'}`;
+            nextWord();
+            showScreen('game');
+            startTimer();
+        };
+
+        const nextWord = () => {
+            if (currentWords.length === 0) {
+                endGame();
+                return;
+            }
+            const [tamil, phonetic, meaning] = currentWords.pop();
+            const container = document.getElementById('card-content');
+            container.classList.remove('word-pop');
+            void container.offsetWidth; 
+            document.getElementById('word-tamil').innerText = tamil;
+            document.getElementById('word-phonetic').innerText = phonetic;
+            document.getElementById('word-meaning').innerText = meaning;
+            container.classList.add('word-pop');
+        };
+
+        const handleAction = (type) => {
+            if (type === 'correct') {
+                score++;
+                document.getElementById('game-score').innerText = score;
+                if (navigator.vibrate) navigator.vibrate(40);
+            }
+            nextWord();
+        };
+
+        const startTimer = () => {
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timer--;
+                updateTimerDisplay();
+                if (timer <= 0) endGame();
+            }, 1000);
+        };
+
+        const updateTimerDisplay = () => {
+            const pill = document.getElementById('timer-pill');
+            pill.innerText = `00:${timer.toString().padStart(2, '0')}`;
+            if (timer <= 10) pill.classList.add('text-red-500');
+            else pill.classList.remove('text-red-500');
+        };
+
+        const confirmQuit = () => {
+            if (confirm("Quit round?")) {
+                clearInterval(timerInterval);
+                showScreen('home');
+            }
+        };
+
+        const endGame = () => {
+            clearInterval(timerInterval);
+            teamScores[currentTeam] += score;
+            document.getElementById('final-score').innerText = score;
+            currentTeam = currentTeam === 1 ? 2 : 1;
+            showScreen('results');
+            updateTotalDisplay();
+        };
+
+        const shareScore = () => {
+            const lastTeam = currentTeam === 2 ? 'A' : 'B';
+            const text = `Team ${lastTeam} just scored ${score} on Oru Varthai! 🎭`;
+            if (navigator.share) navigator.share({ text: text });
+        };
+
+        // Swipe support
+        let touchstartX = 0;
+        let touchendX = 0;
+        const swipeArea = document.getElementById('game-swipe-area');
+
+        swipeArea.addEventListener('touchstart', e => {
+            touchstartX = e.changedTouches[0].screenX;
+        });
+
+        swipeArea.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        const handleSwipe = () => {
+            const threshold = 50;
+            if (touchendX < touchstartX - threshold) handleAction('correct');
+            if (touchendX > touchstartX + threshold) handleAction('pass');
+        };
+
+        loadGame();
+    </script>
+</body>
+</html>
