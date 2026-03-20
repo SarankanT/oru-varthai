@@ -177,14 +177,14 @@
             document.getElementById('screen-' + id).classList.add('active');
         };
 
-        const startGame = (cat) => {
-            currentWords = [...categories[cat]].sort(() => Math.random() - 0.5);
-            score = 0;
-            timer = 60;
-            document.getElementById('game-score').innerText = score;
-            nextWord();
-            showScreen('game');
-            startTimer();
+        const updateTimerDisplay = () => {
+            const pill = document.getElementById('timer-pill');
+            pill.innerText = `00:${timer.toString().padStart(2, '0')}`;
+            if (timer <= 10) {
+                pill.style.color = '#ef4444'; // red-500
+            } else {
+                pill.style.color = 'var(--timer-color)';
+            }
         };
 
         const nextWord = () => {
@@ -199,6 +199,17 @@
             container.classList.add('word-pop');
         };
 
+        const startGame = (cat) => {
+            currentWords = [...categories[cat]].sort(() => Math.random() - 0.5);
+            score = 0;
+            timer = 60;
+            document.getElementById('game-score').innerText = score;
+            nextWord();
+            showScreen('game');
+            startTimer();
+            updateTimerDisplay(); // Reset color immediately
+        };
+
         const flashBackground = (className) => {
             const screen = document.getElementById('screen-game');
             screen.classList.add(className);
@@ -210,33 +221,22 @@
                 score++;
                 document.getElementById('game-score').innerText = score;
                 flashBackground('correct-bg');
-                if (navigator.vibrate) navigator.vibrate(40);
+                try { if (navigator.vibrate) navigator.vibrate(40); } catch(e) {}
             } else {
                 flashBackground('pass-bg');
-                if (navigator.vibrate) navigator.vibrate([20, 30, 20]);
+                try { if (navigator.vibrate) navigator.vibrate([20, 30, 20]); } catch(e) {}
             }
             nextWord();
         };
 
         const startTimer = () => {
+            if (timerInterval) clearInterval(timerInterval);
             updateTimerDisplay();
             timerInterval = setInterval(() => {
                 timer--;
                 updateTimerDisplay();
                 if (timer <= 0) endGame();
             }, 1000);
-        };
-
-        const updateTimerDisplay = () => {
-            const pill = document.getElementById('timer-pill');
-            pill.innerText = `00:${timer.toString().padStart(2, '0')}`;
-            if (timer <= 10) {
-                pill.classList.remove('text-gray-700');
-                pill.classList.add('text-red-500');
-            } else {
-                pill.classList.remove('text-red-500');
-                pill.classList.add('text-gray-700');
-            }
         };
 
         const confirmQuit = () => {
@@ -260,7 +260,5 @@
         loadGame();
         loadTheme();
     </script>
-</body>
-</html>
 </body>
 </html>
