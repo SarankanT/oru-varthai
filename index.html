@@ -123,16 +123,24 @@
             const isLight = document.body.classList.contains('light-mode');
             document.getElementById('sun-icon').classList.toggle('hidden', !isLight);
             document.getElementById('moon-icon').classList.toggle('hidden', isLight);
+            
+            // Ensure background color is explicitly set on body to force transition
+            document.body.style.backgroundColor = isLight ? '#f9fafb' : '#000';
+            
             localStorage.setItem('theme', isLight ? 'light' : 'dark');
-            renderCategories(); // Redraw buttons with theme colors
+            renderCategories();
         };
 
         const loadTheme = () => {
             const saved = localStorage.getItem('theme');
-            if (saved === 'light') {
+            const isLight = saved === 'light';
+            if (isLight) {
                 document.body.classList.add('light-mode');
                 document.getElementById('sun-icon').classList.remove('hidden');
                 document.getElementById('moon-icon').classList.add('hidden');
+                document.body.style.backgroundColor = '#f9fafb';
+            } else {
+                document.body.style.backgroundColor = '#000';
             }
         };
 
